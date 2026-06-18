@@ -1,4 +1,4 @@
-﻿using ClosedXML.Excel;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -368,8 +368,6 @@ namespace VotingAppTest.Controllers
                 TempData["Error"] = "Failed to send verification email. Please try again.";
                 // Log exception here
             }
-
-            _emailService.SendVerificationEmail(user.Email, verifyUrl);
 
             TempData["StudentId"] = studentId;
             return RedirectToAction("Verify");
