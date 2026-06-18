@@ -1,0 +1,255 @@
+﻿@* @model Dictionary<string, List<VoteResultViewModel>>
+@{
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+    var showResults = ViewBag.ShowResults as bool? ?? false;
+
+    // Grab current user info from ViewBag (set in controller)
+    var currentUser = ViewBag.CurrentUser as VotingAppTest.Models.User;
+}
+
+<h3 class="fw-bold mb-4">Voting Results</h3>
+
+@if (Context.Session.GetString("Role") == "Admin")
+{
+        <form asp-action="ToggleResults" method="post" class="mb-3">
+            <select name="course" class="form-select d-inline w-auto">
+                <option value="BSIT">BSIT</option>
+                <option value="BSCPE">BSCPE</option>
+            </select>
+            <select name="yearLevel" class="form-select d-inline w-auto">
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+            </select>
+            <select name="section" class="form-select d-inline w-auto">
+                <option value="A">Section A</option>a
+                <option value="B">Section B</option>
+            </select>
+        <select name="category" class="form-select d-inline w-auto">
+            <option value="StudentCouncil">Student Council</option>
+            <option value="Other">Other Candidates</option>
+        </select>
+
+
+            <button type="submit" name="show" value="true" class="btn btn-success">Show Results</button>
+            <button type="submit" name="show" value="false" class="btn btn-danger">Hide Results</button>
+        </form>
+    
+    <!-- ✅ Admins always see results -->
+    @foreach (var position in Model.Keys)
+    {
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header" style="background:#a5d6a7; color:#212529; font-weight:bold;">
+                @position
+            </div>
+            <div class="card-body">
+                @foreach (var result in Model[position])
+                {
+                    <div class="mb-3">
+                        <strong>@result.Candidate.FullName</strong>
+                        <span class="text-muted">(@result.VoteCount votes)</span>
+                        <div class="progress mt-1" style="height:25px;">
+                            <div class="progress-bar bg-success" role="progressbar"
+                                 style="width:@result.Percentage%">
+                            </div>
+                        </div>
+                        <small class="text-muted">
+                            @result.Candidate.Course - Section @result.Candidate.Section | Year @result.Candidate.YearLevel
+                            <br />
+                            <span class="badge bg-warning text-dark">@result.Candidate.Category</span> <!-- ✅ Category -->
+                        </small>
+                    </div>
+                }
+
+            </div>
+        </div>
+    }
+}
+else
+{
+    <!-- ✅ Voters only see results if ShowResults is true -->
+    @if (!showResults)
+    {
+        <div class="alert alert-info text-center">
+            🗳️ Voting results will appear after the election.
+        </div>
+    }
+    else
+    {
+        @foreach (var position in Model.Keys)
+        {
+            // Filter results by current user's group
+            var filteredResults = Model[position]
+                .Where(r => currentUser != null &&
+                            r.Candidate.Course == currentUser.Course &&
+                            r.Candidate.Section == currentUser.Section &&
+                            r.Candidate.YearLevel == currentUser.YearLevel);
+
+            if (filteredResults.Any())
+            {
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header" style="background:#a5d6a7; color:#212529; font-weight:bold;">
+                        @position
+                    </div>
+                    <div class="card-body">
+                        @foreach (var result in filteredResults)
+                        {
+                            <div class="mb-3">
+                                <strong>@result.Candidate.FullName</strong>
+                                <span class="text-muted">(@result.VoteCount votes)</span>
+                                <div class="progress mt-1" style="height:25px;">
+                                    <div class="progress-bar bg-success" role="progressbar"
+                                         style="width:@result.Percentage%">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    }
+} *@
+@model Dictionary<string, List<VoteResultViewModel>>
+@{
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+    var showResults = ViewBag.ShowResults as bool? ?? false;
+    var currentUser = ViewBag.CurrentUser as VotingAppTest.Models.User;
+    var role = ViewBag.Role as string ?? (Context.Session.GetString("Role") ?? "");
+}
+
+<h3 class="fw-bold mb-4">Voting Results</h3>
+
+@if (string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase))
+{
+    <form asp-action="ToggleResults" method="post" class="mb-3">
+        @Html.AntiForgeryToken()
+        <select name="course" class="form-select d-inline w-auto">
+            <option value="BSIT">BSIT</option>
+            <option value="BSCPE">BSCPE</option>
+        </select>
+
+        <select name="yearLevel" class="form-select d-inline w-auto">
+            <option value="1">1st Year</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
+            <option value="4">4th Year</option>
+        </select>
+
+        <select name="section" class="form-select d-inline w-auto">
+            <option value="A">Section A</option>
+            <option value="B">Section B</option>
+        </select>
+
+        <select name="category" class="form-select d-inline w-auto">
+            <option value="StudentCouncil">Student Council</option>
+            <option value="Other">Other Candidates</option>
+        </select>
+
+        <button type="submit" name="show" value="true" class="btn btn-success">Show Results</button>
+        <button type="submit" name="show" value="false" class="btn btn-danger">Hide Results</button>
+    </form>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">No results available.</div>
+    }
+    else
+    {
+        @foreach (var position in Model.Keys)
+        {
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header" style="background:#a5d6a7; color:#212529; font-weight:bold;">
+                    @position
+                </div>
+                <div class="card-body">
+                    @foreach (var result in Model[position])
+                    {
+                        var pct = Math.Max(0, Math.Min(100, result.Percentage));
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <strong>@result.Candidate.FullName</strong>
+                                <span class="text-muted">(@result.VoteCount votes)</span>
+                            </div>
+
+                            <div class="progress mt-1" style="height:25px;">
+                                <div class="progress-bar bg-success" role="progressbar"
+                                     style="width:@($"{pct}%");">
+                                    @String.Format("{0:0.0}%", pct)
+                                </div>
+                            </div>
+
+                            <small class="text-muted">
+                                @result.Candidate.Course - Section @result.Candidate.Section | Year @result.Candidate.YearLevel
+                                <br />
+                                <span class="badge bg-warning text-dark">@result.Candidate.Category</span>
+                            </small>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+}
+else
+{
+    @if (!showResults)
+    {
+        <div class="alert alert-info text-center">
+            🗳️ Voting results will appear after the election.
+        </div>
+    }
+    else
+    {
+        if (Model == null || !Model.Any())
+        {
+            <div class="alert alert-info text-center">
+                No results available for your group yet.
+            </div>
+        }
+        else
+        {
+            var anyRendered = false;
+            foreach (var position in Model.Keys)
+            {
+                // Controller should already scope the model to the voter's group.
+                var resultsForPosition = Model[position];
+                if (!resultsForPosition.Any()) continue;
+
+                anyRendered = true;
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header" style="background:#a5d6a7; color:#212529; font-weight:bold;">
+                        @position
+                    </div>
+                    <div class="card-body">
+                        @foreach (var result in resultsForPosition)
+                        {
+                            var pct = Math.Max(0, Math.Min(100, result.Percentage));
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <strong>@result.Candidate.FullName</strong>
+                                    <span class="text-muted">(@result.VoteCount votes)</span>
+                                </div>
+
+                                <div class="progress mt-1" style="height:25px;">
+                                    <div class="progress-bar bg-success" role="progressbar"
+                                         style="width:@($"{pct}%");">
+                                        @String.Format("{0:0.0}%", pct)
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            if (!anyRendered)
+            {
+                <div class="alert alert-info text-center">
+                    No results available for your group yet.
+                </div>
+            }
+        }
+    }
+}

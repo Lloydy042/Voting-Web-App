@@ -1,0 +1,44 @@
+﻿@model VotingAppTest.Models.Candidate
+@{
+    ViewData["Title"] = "Delete Candidate";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<div class="card mb-4 shadow-lg text-center" style="border-radius: 12px;">
+    <div class="card-header bg-danger text-white" style="border-radius:12px 12px 0 0;">
+        <h3 class="fw-bold mb-2"><i class="fas fa-user-times"></i> Delete Candidate</h3>
+        <p class="mb-0">Are you sure you want to remove this candidate?</p>
+    </div>
+</div>
+
+<div class="card shadow-sm border-danger">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4 fw-semibold">Full Name</dt>
+            <dd class="col-sm-8">@Model.FullName</dd>
+
+            <dt class="col-sm-4 fw-semibold">Position</dt>
+            <dd class="col-sm-8">@Model.Position</dd>
+
+            <dt class="col-sm-4 fw-semibold">Course / Section</dt>
+            <dd class="col-sm-8">@Model.Course - Section @Model.Section</dd>
+
+            <dt class="col-sm-4 fw-semibold">Year Level</dt>
+            <dd class="col-sm-8">@Model.YearLevel</dd>
+        </dl>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Confirm Delete
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>

@@ -1,0 +1,102 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+.page-banner {
+    background: linear-gradient(90deg, #43a047, #66bb6a);
+    color: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+    .page-banner h3 {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .page-banner p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+.card {
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+.card-header {
+    background: linear-gradient(90deg, #a5d6a7, #81c784);
+    color: #212529;
+    font-weight: bold;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+.btn-primary {
+    background: linear-gradient(90deg, #43a047, #66bb6a);
+    border: none;
+    border-radius: 20px;
+    padding: 6px 14px;
+    transition: all 0.3s ease;
+}
+
+    .btn-primary:hover {
+        background: linear-gradient(90deg, #2e7d32, #43a047);
+        box-shadow: 0 0 10px rgba(67,160,71,0.5);
+    }
+
+.btn-success {
+    background: #388e3c;
+    border: none;
+    border-radius: 20px;
+}
+
+.btn-warning {
+    border-radius: 20px;
+}
+
+.btn-danger {
+    border-radius: 20px;
+}
+.tip-card {
+    background: #f1f8e9;
+    border-left: 5px solid #66bb6a;
+}
+
+    .tip-card h5 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }

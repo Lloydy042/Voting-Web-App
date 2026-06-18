@@ -1,0 +1,62 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<!-- Welcome Banner -->
+<div class="card mb-4 shadow-sm text-center" style="border-radius: 10px;">
+    <div class="card-body" style="background: #a5d6a7; color: #212529;">
+        <img src="~/pictures/cdm_logo.png" alt="Colegio de Montalban Seal"
+             style="width: 100px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); border-radius: 50%;" />
+        <h3 class="fw-bold mb-2">CDM Colegio de Montalban</h3>
+        <h5 class="mb-3">Institute of Computer Studies Election 2029</h5>
+        <p class="text-muted">Empowering students through leadership and participation</p>
+    </div>
+</div>
+
+
+<!-- Quick Navigation Tiles -->
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+                <div class="mb-3" style="font-size: 2rem; color: #4caf50;">📋</div>
+                <h5 class="fw-bold">Candidates</h5>
+                <p class="text-muted">Meet the students running for office.</p>
+                <a href="/Candidates/Index" class="btn btn-success">View Candidates</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+                <div class="mb-3" style="font-size: 2rem; color: #4caf50;">🗳</div>
+                <h5 class="fw-bold">Summary of Votes</h5>
+                <p class="text-muted">Check out your chosen candidates for this election</p>
+                <a href="/Home/MyResults" class="btn btn-primary">Go to Voting Summary</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+                <div class="mb-3" style="font-size: 2rem; color: #4caf50;">📊</div>
+                <h5 class="fw-bold">Results</h5>
+                <p class="text-muted">Check live election outcomes and percentages.</p>
+                <a href="/Votes/Results" class="btn btn-warning">View Results</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Extra Info Section -->
+<div class="card mt-4 shadow-sm">
+    <div class="card-body">
+        <h5 class="fw-bold">About the Election</h5>
+        <p class="text-muted">
+            The Student Council Election is held annually to select leaders who will represent the voice of the student body.
+            Your participation helps strengthen our community and ensures fair representation.
+        </p>
+    </div>
+</div>

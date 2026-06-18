@@ -1,0 +1,35 @@
+﻿@model VotingAppTest.Models.User
+@{
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<h2>Edit User</h2>
+
+<form asp-action="EditUser" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="StudentId"></label>
+        <input asp-for="StudentId" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Role"></label>
+        <select asp-for="Role" class="form-control">
+            <option value="Voter">Voter</option>
+            <option value="Admin">Admin</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IsVerified"></label>
+        <input asp-for="IsVerified" type="checkbox" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

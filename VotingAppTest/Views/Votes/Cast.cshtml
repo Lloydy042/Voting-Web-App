@@ -1,0 +1,49 @@
+﻿
+
+@model Candidate
+@{
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<div class="card shadow-sm text-center">
+    <div class="card-body">
+        <h3 class="fw-bold">Confirm Your Vote</h3>
+
+        <!-- Candidate Picture -->
+        @if (Model.ImageData != null && Model.ImageData.Length > 0)
+        {
+            var base64 = Convert.ToBase64String(Model.ImageData);
+            var imgSrc = $"data:image/png;base64,{base64}";
+            <img src="@imgSrc" alt="@Model.FullName" class="rounded-circle mb-3" style="width:100px;height:100px;object-fit:cover;" />
+        }
+        else
+        {
+            <img src="/pictures/candidates/default.png" alt="Default" class="rounded-circle mb-3" style="width:100px;height:100px;object-fit:cover;" />
+        }
+
+        <!-- Candidate Info -->
+        <p>
+            You are voting for <strong>@Model.FullName</strong><br />
+            <span class="text-muted">(@Model.Position)</span>
+        </p>
+
+        <!-- Show category context -->
+        @if (Model.Category == "StudentCouncil")
+        {
+            <p><span class="badge bg-warning text-dark">Student Council</span></p>
+        }
+        else
+        {
+            <p class="text-muted">
+                @Model.Course - Year @Model.YearLevel, Section @Model.Section
+            </p>
+        }
+
+        <!-- Confirm Form -->
+        <form asp-action="CastVote" method="post">
+            <input type="hidden" name="candidateId" value="@Model.Id" />
+            <button type="submit" class="btn btn-success">✅ Confirm Vote</button>
+            <a asp-action="Index" asp-controller="Candidates" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div></div>

@@ -1,0 +1,91 @@
+﻿@model dynamic
+@{
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-success text-white text-center">
+            <h3 class="mb-0">
+                <i class="fas fa-chart-pie"></i> Voter Statistics
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row text-center mb-4">
+                <div class="col-md-4">
+                    <div class="p-3 bg-light rounded shadow-sm">
+                        <h5 class="text-secondary">Total Registered Voters</h5>
+                        <h3 class="fw-bold text-dark">@ViewBag.TotalVoters</h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 bg-light rounded shadow-sm">
+                        <h5 class="text-success">Voters Who Have Voted</h5>
+                        <h3 class="fw-bold text-success">@ViewBag.Voted</h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 bg-light rounded shadow-sm">
+                        <h5 class="text-danger">Voters Who Haven't Voted</h5>
+                        <h3 class="fw-bold text-danger">@ViewBag.NotVoted</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <div style="width:200px; height:200px;">
+                    <canvas id="voterChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer text-center">
+            @if (Context.Session.GetString("Role") == "Admin")
+            {
+                <a asp-controller="Home" asp-action="DownloadVotingExcel" class="btn btn-outline-success btn-lg">
+                    <i class="fas fa-file-excel"></i> Print Voting Report (Excel)
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script>
+    const ctx = document.getElementById('voterChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Voted', 'Not Voted'],
+            datasets: [{
+                data: [@ViewBag.Voted, @ViewBag.NotVoted],
+                backgroundColor: ['#4CAF50', '#F44336'],
+                borderColor: ['#ffffff', '#ffffff'],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Voting Turnout Overview',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    }
+                }
+            }
+        }
+    });
+</script>

@@ -1,0 +1,111 @@
+﻿@model VotingAppTest.Models.Candidate
+@{
+    ViewData["Title"] = "Edit Candidate";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<div class="card mb-4 shadow-sm text-center" style="border-radius: 10px;">
+    <div class="card-body" style="background: #0C4E35; color: #fff;">
+        <h3 class="fw-bold mb-2">Edit Candidate</h3>
+        <p class="text-light">Update the candidate's details and academic info</p>
+    </div>
+</div>
+
+<div class="card shadow-sm border-success">
+    <div class="card-body">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <!-- Candidate Photo -->
+            <div class="mb-3">
+                <label for="ImageFile" class="form-label fw-semibold">Candidate Photo</label>
+                <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+            </div>
+
+            <!-- Full Name -->
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label fw-semibold"></label>
+                <input asp-for="FullName" class="form-control" placeholder="Enter full name" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <!-- Position -->
+            <div class="mb-3">
+                <label asp-for="Position" class="form-label fw-semibold"></label>
+                <select asp-for="Position" class="form-select">
+                    <option value="President">President</option>
+                    <option value="Vice President">Vice President</option>
+                    <option value="Secretary">Secretary</option>
+                    <option value="Treasurer">Treasurer</option>
+                    <option value="Public Relations Officer (PRO)">Public Relations Officer (PRO)</option>
+                    <option value="Auditor">Auditor</option>
+                    <option value="1st year Representative">1st year Representative</option>
+                    <option value="2nd year Representative">2nd year Representative</option>
+                    <option value="3rd year Representative">3rd year Representative</option>
+                </select>
+                <span asp-validation-for="Position" class="text-danger"></span>
+            </div>
+
+            <!-- Academic Info -->
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label asp-for="Course" class="form-label fw-semibold"></label>
+                    <input asp-for="Course" class="form-control" placeholder="e.g. BSIT" />
+                    <span asp-validation-for="Course" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label asp-for="Section" class="form-label fw-semibold"></label>
+                    <select asp-for="Section" class="form-select">
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                    <span asp-validation-for="Section" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label asp-for="YearLevel" class="form-label fw-semibold"></label>
+                    <select asp-for="YearLevel" class="form-select">
+                        <option value="1">1st Year</option>
+                        <option value="2">2nd Year</option>
+                        <option value="3">3rd Year</option>
+                        <option value="4">4th Year</option>
+                    </select>
+                    <span asp-validation-for="YearLevel" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label fw-semibold"></label>
+                <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <!-- Vision -->
+            <div class="mb-3">
+                <label asp-for="Vision" class="form-label fw-semibold"></label>
+                <textarea asp-for="Vision" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Vision" class="text-danger"></span>
+            </div>
+
+            <!-- Plans -->
+            <div class="mb-3">
+                <label asp-for="Plans" class="form-label fw-semibold"></label>
+                <textarea asp-for="Plans" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Plans" class="text-danger"></span>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>

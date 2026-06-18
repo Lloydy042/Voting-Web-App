@@ -1,0 +1,160 @@
+﻿@page 
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CDM Voting System - Two-Factor Authentication</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            background: #ffffff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .bg-waves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('/images/bg_waves.png');
+            background-size: cover;
+            opacity: 0.12;
+            z-index: -1;
+            filter: blur(2px);
+        }
+
+        .verify-wrapper {
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            margin-left: -15px;
+        }
+
+            .header-logo img {
+                width: 70px;
+                margin-right: 10px;
+            }
+
+        .header-logo-text {
+            text-align: left;
+        }
+
+            .header-logo-text h2 {
+                margin: 0;
+                font-size: 28px;
+                font-weight: bold;
+                color: #0C4E35;
+            }
+
+            .header-logo-text p {
+                margin: 0;
+                font-size: 12px;
+                letter-spacing: 1px;
+                color: #2d4b62;
+            }
+
+        .verify-card {
+            background: #ffffff;
+            padding: 30px 28px;
+            border-radius: 12px;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0px 4px 18px rgba(0,0,0,0.08);
+        }
+
+        .form-control {
+            height: 45px;
+            border-radius: 8px;
+        }
+
+        .label-text {
+            float: left;
+            margin-bottom: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .btn-verify {
+            background: #1FA64A;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            color: white;
+            width: 100%;
+        }
+
+            .btn-verify:hover {
+                background: #168e3e;
+            }
+
+        .back-link {
+            color: #0066cc;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-waves"></div>
+
+    <div class="verify-wrapper">
+
+        <!-- Logo Header -->
+        <div class="header-logo">
+            <img src="/pictures/cdm_logo.png" alt="CDM Logo" />
+            <div class="header-logo-text">
+                <h2>CDM</h2>
+                <p>COLEGIO DE MONTALBAN</p>
+            </div>
+        </div>
+
+        <div class="verify-card">
+            <h4 class="mb-3">Two-Factor Authentication</h4>
+
+            <form method="post">
+                <label class="label-text">Authentication Code</label>
+                <input name="code" class="form-control mb-3" placeholder="Enter the code sent to your email" required />
+                <button class="btn btn-verify">Verify</button>
+            </form>
+
+            <a>Didn't get the code?</a>
+
+
+            <form asp-action="ResendAuthenticationCode" method="post">
+                <button type="submit" class="btn btn-link">Resend Code</button>
+            </form>
+
+            @if (ViewBag.Error != null)
+            {
+                <p class="text-danger mt-3">@ViewBag.Error</p>
+            }
+
+        @*     <div class="text-center mt-3">
+                <a href="/Dasboard/Index" class="back-link">Proceed to Dashboard</a>
+            </div>
+        </div> *@
+
+    </div>
+        <script>
+            history.pushState(null, null, location.href);
+            window.onpopstate = function () {
+                history.go(1);
+            };
+        </script>
+</body>
+</html> 

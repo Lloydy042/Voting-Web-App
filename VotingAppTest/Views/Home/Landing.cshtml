@@ -1,0 +1,153 @@
+﻿@{
+    Layout = null; // no dashboard layout, keep it simple
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to CDM Voting System</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            background: #f9f9f9;
+            font-family: Arial, sans-serif;
+        }
+
+        .landing-wrapper {
+            max-width: 900px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 18px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .landing-logo img {
+            width: 100px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            color: #0C4E35;
+        }
+
+        p {
+            color: #555;
+            font-size: 16px;
+        }
+
+        .features {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .feature-card {
+            background: #f1f8f4;
+            border-radius: 10px;
+            padding: 20px;
+            width: 250px;
+            margin: 15px;
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+        }
+
+            .feature-card h4 {
+                color: #0C4E35;
+                font-weight: bold;
+            }
+
+        .timeline {
+            margin-top: 50px;
+            text-align: left;
+        }
+
+            .timeline h3 {
+                color: #0C4E35;
+                font-weight: bold;
+            }
+
+            .timeline ul {
+                list-style: none;
+                padding: 0;
+            }
+
+                .timeline ul li {
+                    margin: 10px 0;
+                    padding: 10px;
+                    background: #e8f5e9;
+                    border-radius: 8px;
+                }
+
+        footer {
+            margin-top: 50px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <!-- ✅ Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-success" href="#">
+                <img src="/pictures/cdm_logo.png" alt="CDM Logo" width="40" class="me-2" />
+                CDM Voting System
+            </a>
+            <div class="ms-auto">
+                <a href="/Home/Login" class="btn btn-outline-success me-2">Login</a>
+                <a href="/Home/Register" class="btn btn-success">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Landing Content -->
+    <div class="landing-wrapper">
+        <h1>Welcome to Colegio de Montalban Voting System</h1>
+        <p>Transparent. Secure. Fair. Your voice matters in shaping our community.</p>
+
+        <!-- Features Section -->
+        <div class="features">
+            <div class="feature-card">
+                <h4>🛡️ Secure</h4>
+                <p>Two-factor authentication keep your vote safe.</p>
+            </div>
+            <div class="feature-card">
+                <h4>📊 Transparent</h4>
+                <p>Real-time results and clear reporting ensure fairness.</p>
+            </div>
+            <div class="feature-card">
+                <h4>🎓 Student-Centered</h4>
+                <p>Designed to reflect CDM’s identity and empower every student voice.</p>
+            </div>
+            <div class="feature-card">
+                <h4>Easy to use</h4>
+                <p>Each Candidates have their own Qr code you can scan</p>
+            </div>
+        </div>
+
+
+        <!-- Timeline Section -->
+        <div class="timeline">
+            <h3>🗓️ Election Timeline</h3>
+            <ul>
+                <li><strong>Registration:</strong> Dec 1 – Dec 5</li>
+                <li><strong>Campaign Period:</strong> Dec 6 – Dec 8</li>
+                <li><strong>Voting Day:</strong> Dec 9</li>
+                <li><strong>Results Announcement:</strong> Dec 10</li>
+            </ul>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>
+                © 2025 Colegio de Montalban | For support, contact
+                <a href="mailto:support@cdm.edu.ph">support@cdm.edu.ph</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

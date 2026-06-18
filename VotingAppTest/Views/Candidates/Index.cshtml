@@ -1,0 +1,285 @@
+﻿@model Dictionary<string, List<Candidate>>
+@{
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style>
+
+    .page-banner {
+        background: linear-gradient(90deg, #43a047, #66bb6a);
+        color: #fff;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+        .page-banner.card {
+            background: transparent !important;
+        }
+
+        .page-banner h3 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .page-banner p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+    .card {
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+    .card-header {
+        background: linear-gradient(90deg, #a5d6a7, #81c784);
+        color: #212529;
+        font-weight: bold;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    .student-council-banner {
+        background: linear-gradient(90deg, #0d47a1, #1976d2); /* deep blue gradient */
+        color: #fff;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    .student-council-card .card-header {
+        background: linear-gradient(90deg, #ffd700, #fbc02d); /* gold gradient */
+        color: #212529;
+        font-weight: bold;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    .student-council-card .btn-primary {
+        background: linear-gradient(90deg, #0d47a1, #1976d2);
+        border: none;
+        border-radius: 20px;
+        padding: 6px 14px;
+        transition: all 0.3s ease;
+    }
+
+        .student-council-card .btn-primary:hover {
+            background: linear-gradient(90deg, #08306b, #0d47a1);
+            box-shadow: 0 0 10px rgba(25,118,210,0.5);
+        }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #43a047, #66bb6a);
+        border: none;
+        border-radius: 20px;
+        padding: 6px 14px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #2e7d32, #43a047);
+            box-shadow: 0 0 10px rgba(67,160,71,0.5);
+        }
+
+    .btn-success {
+        background: #388e3c;
+        border: none;
+        border-radius: 20px;
+    }
+
+    .btn-warning {
+        border-radius: 20px;
+    }
+
+    .btn-danger {
+        border-radius: 20px;
+    }
+
+    .tip-card {
+        background: #f1f8e9;
+        border-left: 5px solid #66bb6a;
+    }
+
+        .tip-card h5 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+</style>
+<!-- Page Banner -->
+<!-- Page Banner -->
+<div class="page-banner mb-4 text-center">
+    <h3 class="fw-bold mb-2">ICS Candidates</h3>
+    <p>Meet the students running for leadership positions</p>
+
+    @if (Context.Session.GetString("Role") != "Admin")
+    {
+        <div class="mt-2">
+            <span class="badge bg-success fs-6">
+                Showing candidates for @ViewBag.CurrentCourse - Section @ViewBag.CurrentSection | Year @ViewBag.CurrentYearLevel
+            </span>
+        </div>
+    }
+</div>
+@if (Context.Session.GetString("Role") == "Admin") 
+{ 
+    <div class="mb-3 text-end">
+        <a asp-action="Create" class="btn btn-success">
+            ➕ Add Candidate
+        </a>
+    </div>
+    
+}
+<!-- 🏛️ Student Council Section -->
+<div class="student-council-banner mb-4 text-center">
+    <h3 class="fw-bold mb-2">Student Council Candidates</h3>
+</div>
+
+<div class="row g-4">
+
+    @foreach (var group in (Dictionary<string, List<Candidate>>)ViewBag.StudentCouncilGroups)
+    {
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header">@group.Key</div>
+                <div class="card-body">
+                    @foreach (var candidate in group.Value)
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            @if (candidate.ImageData != null && candidate.ImageData.Length > 0)
+                            {
+                                var base64 = Convert.ToBase64String(candidate.ImageData);
+                                var imgSrc = $"data:image/png;base64,{base64}";
+                                <img src="@imgSrc" alt="@candidate.FullName"
+                                     class="img-thumbnail me-2" style="width:80px; height:80px; object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <img src="/pictures/candidates/default.png" alt="Default"
+                                     class="img-thumbnail me-2" style="width:80px; height:80px; object-fit:cover;" />
+                            }
+
+                            <span>@candidate.FullName</span>
+
+                            <div class="btn-group">
+                                <a asp-action="Profile" asp-route-id="@candidate.Id" class="btn btn-sm btn-success">View</a>
+                            </div>
+                        </div>
+
+                        @if (ViewBag.VotedPositions != null &&
+                                        ((List<string>)ViewBag.VotedPositions)
+                                        .Contains($"{candidate.Position}|{candidate.Category}"))
+                        {
+                            <span class="badge bg-success">✅ Already Voted</span>
+                        }
+                        else
+                        {
+                            <a asp-controller="Votes" asp-action="Cast" asp-route-candidateId="@candidate.Id"
+                               class="btn btn-sm btn-primary">🗳️ Vote</a>
+                        }
+
+
+                        @if (Context.Session.GetString("Role") == "Admin")
+                        {
+                            <a asp-action="Edit" asp-route-id="@candidate.Id" class="btn btn-sm btn-warning">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@candidate.Id" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Are you sure you want to delete this candidate?');">
+                                    Delete
+                                </button>
+                            </form>
+                        }
+                        <!-- Candidate card layout here (same as before) -->
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@* <!-- 🧑‍🏫 Other Candidates Section -->
+<div class="page-banner mb-4 text-center mt-5">
+    <h3 class="fw-bold mb-2">Class officers</h3>
+</div>
+
+<div class="row g-4">
+    @foreach (var group in (Dictionary<string, List<Candidate>>)ViewBag.OtherGroups)
+    {
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header">@group.Key</div>
+                <div class="card-body">
+                    @foreach (var candidate in group.Value)
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            @if (candidate.ImageData != null && candidate.ImageData.Length > 0)
+                            {
+                                var base64 = Convert.ToBase64String(candidate.ImageData);
+                                var imgSrc = $"data:image/png;base64,{base64}";
+                                <img src="@imgSrc" alt="@candidate.FullName"
+                                     class="img-thumbnail me-2" style="width:80px; height:80px; object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <img src="/pictures/candidates/default.png" alt="Default"
+                                     class="img-thumbnail me-2" style="width:80px; height:80px; object-fit:cover;" />
+                            }
+
+                            <span>@candidate.FullName</span>
+
+                            <div class="btn-group">
+                                <a asp-action="Profile" asp-route-id="@candidate.Id" class="btn btn-sm btn-success">View</a>
+                            </div>
+                        </div>
+
+                        @if (ViewBag.VotedPositions != null &&
+                                        ((List<string>)ViewBag.VotedPositions)
+                                        .Contains($"{candidate.Position}|{candidate.Category}"))
+                        {
+                            <span class="badge bg-success">✅ Already Voted</span>
+                        }
+                        else
+                        {
+                            <a asp-controller="Votes" asp-action="Cast" asp-route-candidateId="@candidate.Id"
+                               class="btn btn-sm btn-primary">🗳️ Vote</a>
+                        }
+
+
+                        @if (Context.Session.GetString("Role") == "Admin")
+                        {
+                            <a asp-action="Edit" asp-route-id="@candidate.Id" class="btn btn-sm btn-warning">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@candidate.Id" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Are you sure you want to delete this candidate?');">
+                                    Delete
+                                </button>
+                            </form>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+} *@
+
+<!-- Extra Info -->
+<div class="card mt-4 shadow-sm tip-card">
+    <div class="card-body">
+        <h5 class="fw-bold"><i class="bi bi-lightbulb"></i> Tip for Voters</h5>
+        <p class="text-muted">
+            Click “View Profile” to learn more about each candidate’s background,
+            vision, and plans for the student council. Make an informed choice!
+        </p>
+    </div>
+</div>
