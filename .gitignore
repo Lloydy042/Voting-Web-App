@@ -1,0 +1,48 @@
+# Visual Studio cache/options directory
+.vs/
+
+# Visual Studio user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+!**/packages/build/
+
+# NuGet v3's project.json files
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# .NET
+project.lock.json
+project.fragment.lock.json
+*.nupkg
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Rider
+.idea/
+
+# macOS
+.DS_Store
