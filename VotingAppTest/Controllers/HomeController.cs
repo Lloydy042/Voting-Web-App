@@ -261,6 +261,8 @@ namespace VotingAppTest.Controllers
 
             _mongo.Users.UpdateOne(u => u.Id == user.Id, update);
 
+            var resetUrl = Url.Action("ResetPassword", "Home", new { token = token }, Request.Scheme);
+
             try
             {
                 _emailService.SendPasswordResetEmail(user.Email, resetUrl);
