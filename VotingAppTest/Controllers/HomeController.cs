@@ -220,7 +220,14 @@ namespace VotingAppTest.Controllers
             var update = Builders<User>.Update.Set(u => u.VerificationCode, code);
             _mongo.Users.UpdateOne(u => u.Id == user.Id, update);
 
-            _emailService.SendAuthenticationCode(user.Email, code);
+            try
+            {
+                _emailService.SendAuthenticationCode(user.Email, code);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Failed to send authentication code email: " + ex.Message;
+            }
             HttpContext.Session.SetString("User", user.StudentId);
             HttpContext.Session.SetString("Role", user.Role);
             TempData["StudentId"] = studentId;
@@ -254,10 +261,15 @@ namespace VotingAppTest.Controllers
 
             _mongo.Users.UpdateOne(u => u.Id == user.Id, update);
 
-            var resetUrl = Url.Action("ResetPassword", "Home", new { token = token }, Request.Scheme);
-            _emailService.SendPasswordResetEmail(user.Email, resetUrl);
-
-            TempData["Message"] = "Password reset link has been sent to your email.";
+            try
+            {
+                _emailService.SendPasswordResetEmail(user.Email, resetUrl);
+                TempData["Message"] = "Password reset link has been sent to your email.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Failed to send password reset email: " + ex.Message;
+            }
             return RedirectToAction("Login");
         }
 
@@ -437,11 +449,17 @@ namespace VotingAppTest.Controllers
             var update = Builders<User>.Update.Set(u => u.VerificationCode, newCode);
             _mongo.Users.UpdateOne(u => u.Id == user.Id, update);
 
-            _emailService.SendAuthenticationCode(user.Email, newCode);
+            try
+            {
+                _emailService.SendAuthenticationCode(user.Email, newCode);
+                TempData["Success"] = "A new authentication code has been sent to your email.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Failed to send authentication code: " + ex.Message;
+            }
 
             TempData["StudentId"] = studentId;
-            TempData["Success"] = "A new authentication code has been sent to your email.";
-
             return RedirectToAction("Auth", "Home");
         }
         [HttpGet]

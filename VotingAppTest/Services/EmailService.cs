@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 
@@ -33,7 +33,8 @@ public class EmailService
         var smtp = new SmtpClient("smtp.gmail.com", 587)
         {
             Credentials = new NetworkCredential(fromEmail, appPassword),
-            EnableSsl = true
+            EnableSsl = true,
+            Timeout = 5000
         };
 
         smtp.Send(message);
@@ -53,7 +54,8 @@ public class EmailService
         var smtp = new SmtpClient("smtp.gmail.com", 587)
         {
             Credentials = new NetworkCredential(fromEmail, appPassword),
-            EnableSsl = true
+            EnableSsl = true,
+            Timeout = 5000
         };
 
         smtp.Send(message);
@@ -81,7 +83,8 @@ public class EmailService
         var smtp = new SmtpClient("smtp.gmail.com", 587)
         {
             Credentials = new NetworkCredential(fromEmail, appPassword),
-            EnableSsl = true
+            EnableSsl = true,
+            Timeout = 5000
         };
 
         smtp.Send(message);
