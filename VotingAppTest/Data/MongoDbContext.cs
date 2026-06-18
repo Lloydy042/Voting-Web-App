@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver;
+using MongoDB.Driver;
 using VotingAppTest.Models;
 
 public class MongoDbContext
@@ -7,8 +7,15 @@ public class MongoDbContext
 
     public MongoDbContext(IConfiguration config)
     {
-        var client = new MongoClient(config["MongoDB:ConnectionString"]);
-        _database = client.GetDatabase(config["MongoDB:DatabaseName"]);
+        var connectionString = Environment.GetEnvironmentVariable("MONGODB_URI") 
+                               ?? Environment.GetEnvironmentVariable("MONGO_URL") 
+                               ?? config["MongoDB:ConnectionString"];
+        var databaseName = Environment.GetEnvironmentVariable("MONGODB_DATABASE") 
+                           ?? config["MongoDB:DatabaseName"] 
+                           ?? "VotingAppDB";
+
+        var client = new MongoClient(connectionString);
+        _database = client.GetDatabase(databaseName);
     }
 
     public IMongoCollection<User> Users => _database.GetCollection<User>("Users");
