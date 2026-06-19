@@ -18,53 +18,63 @@ public class EmailService
 
     private void SendEmail(string toEmail, string subject, string body, bool isHtml)
     {
-        var resendApiKey = Environment.GetEnvironmentVariable("RESEND_API_KEY") ?? _config["Email:ResendApiKey"];
+        var brevoApiKey = Environment.GetEnvironmentVariable("BREVO_API_KEY") ?? _config["Email:BrevoApiKey"];
 
-        if (!string.IsNullOrEmpty(resendApiKey))
+        if (!string.IsNullOrEmpty(brevoApiKey))
         {
-            try
-            {
-                SendViaResend(resendApiKey, toEmail, subject, body, isHtml);
-                return;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Failed to send email via Resend API: " + ex.Message, ex);
-            }
+            SendViaBrevo(brevoApiKey, toEmail, subject, body, isHtml);
+            return;
         }
 
-        // Fall back to SMTP
+        // Fallback to SMTP
         SendViaSmtp(toEmail, subject, body, isHtml);
     }
 
-    private void SendViaResend(string apiKey, string toEmail, string subject, string body, bool isHtml)
+    private void SendViaBrevo(string apiKey, string toEmail, string subject, string body, bool isHtml)
     {
-        var fromEmail = Environment.GetEnvironmentVariable("RESEND_FROM_EMAIL") 
-                        ?? _config["Email:ResendFrom"] 
-                        ?? "onboarding@resend.dev";
+        var fromEmail = Environment.GetEnvironmentVariable("BREVO_FROM_EMAIL")
+                        ?? _config["Email:Sender"]
+                        ?? "noreply@cdmvoting.com";
 
-        var payload = new
+        var fromName = Environment.GetEnvironmentVariable("BREVO_FROM_NAME")
+                       ?? _config["Email:SenderName"]
+                       ?? "CDM Voting System";
+
+        object content;
+        if (isHtml)
         {
-            from = fromEmail,
-            to = new[] { toEmail },
-            subject = subject,
-            html = isHtml ? body : null,
-            text = isHtml ? null : body
-        };
-
-        var json = JsonSerializer.Serialize(payload);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        using (var request = new HttpRequestMessage(HttpMethod.Post, "https://api.resend.com/emails"))
+            content = new
+            {
+                sender = new { name = fromName, email = fromEmail },
+                to = new[] { new { email = toEmail } },
+                subject = subject,
+                htmlContent = body
+            };
+        }
+        else
         {
-            request.Headers.Add("Authorization", $"Bearer {apiKey}");
-            request.Content = content;
+            content = new
+            {
+                sender = new { name = fromName, email = fromEmail },
+                to = new[] { new { email = toEmail } },
+                subject = subject,
+                textContent = body
+            };
+        }
+
+        var json = JsonSerializer.Serialize(content);
+        var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+        using (var request = new HttpRequestMessage(HttpMethod.Post, "https://api.brevo.com/v3/smtp/email"))
+        {
+            request.Headers.Add("api-key", apiKey);
+            request.Content = requestContent;
 
             var response = _httpClient.Send(request);
             if (!response.IsSuccessStatusCode)
             {
                 var errorText = response.Content.ReadAsStringAsync().Result;
-                throw new Exception($"Resend API returned status code {response.StatusCode}: {errorText}");
+                throw new Exception($"Brevo API returned {response.StatusCode}: {errorText}");
             }
         }
     }
